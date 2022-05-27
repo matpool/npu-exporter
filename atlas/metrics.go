@@ -17,7 +17,7 @@ var (
 	memRegexp     = regexp.MustCompile(`([0-9]+)\s/\s([0-9]+)`)
 )
 
-type NpuCollector struct {}
+type NpuCollector struct{}
 
 type Metrics struct {
 	Version string
@@ -42,7 +42,7 @@ func NewNpuCollector() *NpuCollector {
 }
 
 // TODO: read info from npu driver kernel api by importing dsmi_common_interface.h
-func (nc *NpuCollector)GetNPUInfo() (string, error){
+func (nc *NpuCollector) GetNPUInfo() (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), collectTimeout)
 	defer cancel()
 

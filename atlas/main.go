@@ -12,19 +12,19 @@ import (
 
 const (
 	namespace = "atlas"
-	port = ":9403"
+	port      = ":9403"
 )
 
 type Exporter struct {
-	up                    prometheus.Gauge
-	info                  *prometheus.GaugeVec
-	deviceCount           prometheus.Gauge
-	temperatures          *prometheus.GaugeVec
-	deviceInfo            *prometheus.GaugeVec
-	powerUsage            *prometheus.GaugeVec
-	memoryTotal           *prometheus.GaugeVec
-	memoryUsed            *prometheus.GaugeVec
-	aiCore                *prometheus.GaugeVec
+	up           prometheus.Gauge
+	info         *prometheus.GaugeVec
+	deviceCount  prometheus.Gauge
+	temperatures *prometheus.GaugeVec
+	deviceInfo   *prometheus.GaugeVec
+	powerUsage   *prometheus.GaugeVec
+	memoryTotal  *prometheus.GaugeVec
+	memoryUsed   *prometheus.GaugeVec
+	aiCore       *prometheus.GaugeVec
 }
 
 func main() {
