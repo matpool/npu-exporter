@@ -80,7 +80,7 @@ func NewExporter() *Exporter {
 				Name:      "info",
 				Help:      "Info as reported by the device",
 			},
-			[]string{"deviceid", "chipid", "npuid", "name"},
+			[]string{"deviceid", "chipid", "npuid", "name", "minor"},
 		),
 		temperatures: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
@@ -88,7 +88,7 @@ func NewExporter() *Exporter {
 				Name:      "temperatures",
 				Help:      "Temperature as reported by the device",
 			},
-			[]string{"deviceid"},
+			[]string{"deviceid", "minor"},
 		),
 		powerUsage: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
@@ -96,7 +96,7 @@ func NewExporter() *Exporter {
 				Name:      "power_usage",
 				Help:      "Power usage as reported by the device",
 			},
-			[]string{"deviceid"},
+			[]string{"deviceid", "minor"},
 		),
 		memoryTotal: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
@@ -104,7 +104,7 @@ func NewExporter() *Exporter {
 				Name:      "memory_total",
 				Help:      "Total memory as reported by the device",
 			},
-			[]string{"deviceid"},
+			[]string{"deviceid", "minor"},
 		),
 		memoryUsed: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
@@ -112,7 +112,7 @@ func NewExporter() *Exporter {
 				Name:      "memory_used",
 				Help:      "Used memory as reported by the device",
 			},
-			[]string{"deviceid"},
+			[]string{"deviceid", "minor"},
 		),
 		aiCore: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
@@ -120,7 +120,7 @@ func NewExporter() *Exporter {
 				Name:      "ai_core",
 				Help:      "AICore as reported by the device",
 			},
-			[]string{"deviceid"},
+			[]string{"deviceid", "minor"},
 		),
 	}
 }
@@ -141,12 +141,12 @@ func (e *Exporter) Collect(metrics chan<- prometheus.Metric) {
 	for i := 0; i < len(data.Devices); i++ {
 		d := data.Devices[i]
 		memUsage, memTotal := parseMemoryByte(d.MemoryUsageMB)
-		e.deviceInfo.WithLabelValues(d.Device, d.ChipID, d.NpuID, d.Name).Set(1)
-		e.memoryTotal.WithLabelValues(d.Device).Set(memTotal)
-		e.memoryUsed.WithLabelValues(d.Device).Set(memUsage)
-		e.powerUsage.WithLabelValues(d.Device).Set(parseValueFloat(d.PowerUsage))
-		e.temperatures.WithLabelValues(d.Device).Set(parseValueFloat(d.Temperature))
-		e.aiCore.WithLabelValues(d.Device).Set(parseValueFloat(d.AICore))
+		e.deviceInfo.WithLabelValues(d.Device, d.ChipID, d.NpuID, d.Name, d.Device).Set(1)
+		e.memoryTotal.WithLabelValues(d.Device, d.Device).Set(memTotal)
+		e.memoryUsed.WithLabelValues(d.Device, d.Device).Set(memUsage)
+		e.powerUsage.WithLabelValues(d.Device, d.Device).Set(parseValueFloat(d.PowerUsage))
+		e.temperatures.WithLabelValues(d.Device, d.Device).Set(parseValueFloat(d.Temperature))
+		e.aiCore.WithLabelValues(d.Device, d.Device).Set(parseValueFloat(d.AICore))
 	}
 
 	e.deviceCount.Collect(metrics)
