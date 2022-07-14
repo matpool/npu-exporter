@@ -12,7 +12,7 @@ const collectTimeout = 5 * time.Second
 
 var (
 	infoLength    = 11
-	infoRegexp    = regexp.MustCompile(`\|\s*([0-9]*)\s*(\S*)\s*\|\s*(\S*)\s*\|\s*(\S*)\s*(\S*|\S*\s/\s\S*)\s*\|\s\|\s*([0-9]*)\s*(\S*)\s*\|\s*(\S*)\s*\|\s*(\S*)\s*(\S*|\S*\s/\s\S*)\s*\|`)
+	infoRegexp    = regexp.MustCompile(`\|\s*([0-9]*)\s*(\S*)\s*\|\s*(\S*)\s*\|\s*(\S*)\s*(\S*|\S*\s/\s\S*)\s*.*\|\s\|\s*([0-9]*)\s*(\S*)\s*\|\s*(\S*)\s*\|\s*(\S*)\s*(\S*|\S*\s/\s\S*)\s*.*\|`)
 	versionRegexp = regexp.MustCompile(`.*Version: (?P<version>\S*)\s*`)
 	memRegexp     = regexp.MustCompile(`([0-9]+)\s/\s([0-9]+)`)
 )
@@ -98,6 +98,11 @@ func parseNpuDevices(str string) []*NpuDevice {
 		}
 		for k, v := range info {
 			*params[k].attr = v
+		}
+		// for series A900 there is no output detail Device
+		// in this scene use npuID as device instead
+		if device.Device == "" {
+			device.Device = device.NpuID
 		}
 		devices = append(devices, device)
 	}
