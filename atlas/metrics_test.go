@@ -60,10 +60,24 @@ var (
 | 3       15        | 0000:8E:00.0    | 0                 2621 / 8192          |
 +===================+=================+========================================+`
 
-	deviceCount = 16
+	// test case for series A900
+	testStr2 = `+------------------------------------------------------------------------------------+
+| npu-smi 21.0.3.2                 Version: 21.0.3.2                                 |
++----------------------+---------------+---------------------------------------------+
+| NPU   Name           | Health        | Power(W)   Temp(C)                          |
+| Chip                 | Bus-Id        | AICore(%)  Memory-Usage(MB)  HBM-Usage(MB)  |
++======================+===============+=============================================+
+| 1     910A           | OK            | 65.3       45                               |
+| 0                    | 0000:3B:00.0  | 0          1809 / 15082      0    / 32768   |
++======================+===============+=============================================+
+| 4     910A           | OK            | 63.6       44                               |
+| 0                    | 0000:86:00.0  | 0          1809 / 15082      0    / 32768   |
++======================+===============+=============================================+
+`
 )
 
 func TestParseNpuDevices(t *testing.T) {
+	deviceCount := 16
 	devices := parseNpuDevices(testStr)
 
 	if len(devices) != deviceCount {
@@ -71,11 +85,29 @@ func TestParseNpuDevices(t *testing.T) {
 		return
 	}
 
-	if devices[0].NpuID != "1" && devices[1].NpuID != "310" &&
-		devices[2].Health != "OK" && devices[3].PowerUsage != "12.8" &&
-		devices[4].Temperature != "48" && devices[5].ChipID != "1" &&
-		devices[6].Device != "6" && devices[7].BusID != "0000:0D:00.0" &&
-		devices[8].AICore != "0" && devices[9].MemoryUsageMB != "2621 / 8192" {
+	if devices[0].NpuID != "1" || devices[1].Name != "310" ||
+		devices[2].Health != "OK" || devices[3].PowerUsage != "12.8" ||
+		devices[4].Temperature != "48" || devices[5].ChipID != "1" ||
+		devices[6].Device != "6" || devices[7].BusID != "0000:0D:00.0" ||
+		devices[8].AICore != "0" || devices[9].MemoryUsageMB != "2621" {
 		t.Error("parse failed")
+	}
+}
+
+func TestParseA900SeriesNpuDevices(t *testing.T) {
+	deviceCount := 2
+	devices := parseNpuDevices(testStr2)
+
+	if len(devices) != deviceCount {
+		t.Errorf("devices A900 count error, wanted:%d, accutally:%d", deviceCount, len(devices))
+		return
+	}
+
+	if devices[0].NpuID != "1" || devices[0].Name != "910A" ||
+		devices[0].Health != "OK" && devices[0].PowerUsage != "65.3" ||
+		devices[0].Temperature != "45" || devices[0].ChipID != "0" ||
+		devices[1].Device != "4" || devices[1].BusID != "0000:86:00.0" ||
+		devices[1].AICore != "0" || devices[1].MemoryUsageMB != "1809" {
+		t.Error("parse A900 failed")
 	}
 }
