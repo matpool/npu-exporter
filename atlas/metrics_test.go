@@ -89,7 +89,7 @@ func TestParseNpuDevices(t *testing.T) {
 		devices[2].Health != "OK" || devices[3].PowerUsage != "12.8" ||
 		devices[4].Temperature != "48" || devices[5].ChipID != "1" ||
 		devices[6].Device != "6" || devices[7].BusID != "0000:0D:00.0" ||
-		devices[8].AICore != "0" || devices[9].MemoryUsageMB != "2621" {
+		devices[8].AICore != "0" || devices[9].MemoryUsageMB != "2621 / 8192" {
 		t.Error("parse failed")
 	}
 }
@@ -107,7 +107,7 @@ func TestParseA900SeriesNpuDevices(t *testing.T) {
 		devices[0].Health != "OK" && devices[0].PowerUsage != "65.3" ||
 		devices[0].Temperature != "45" || devices[0].ChipID != "0" ||
 		devices[1].Device != "4" || devices[1].BusID != "0000:86:00.0" ||
-		devices[1].AICore != "0" || devices[1].MemoryUsageMB != "1809" {
+		devices[1].AICore != "0" || devices[1].MemoryUsageMB != "1809 / 15082" {
 		t.Error("parse A900 failed")
 	}
 }
