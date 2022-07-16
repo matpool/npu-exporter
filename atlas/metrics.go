@@ -12,7 +12,7 @@ const collectTimeout = 5 * time.Second
 
 var (
 	infoLength    = 11
-	infoRegexp    = regexp.MustCompile(`\|\s*([0-9]*)\s*(\S*)\s*\|\s*(\S*)\s*\|\s*(\S*)\s*(\S*|\S*\s/\s\S*)\s*.*\|\s\|\s*([0-9]*)\s*(\S*)\s*\|\s*(\S*)\s*\|\s*(\S*)\s*(\S*|\S*\s/\s\S*)\s*.*\|`)
+	infoRegexp    = regexp.MustCompile(`\|\s*([0-9]*)\s*(\S*)\s*\|\s*(\S*)\s*\|\s*(\S*)\s*(\S*|\S*\s/\s\S*)\s*.*\|\s\|\s*([0-9]*)\s*(\S*)\s*\|\s*(\S*)\s*\|\s*(\S*)\s*(\S*\s/\s\S*)\s*.*\|`)
 	versionRegexp = regexp.MustCompile(`.*Version: (?P<version>\S*)\s*`)
 	memRegexp     = regexp.MustCompile(`([0-9]+)\s/\s([0-9]+)`)
 )
